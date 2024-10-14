@@ -16,8 +16,8 @@ class Bi_line(FormView):
     form_class = ImageUploadForm
 
     def form_valid(self, form):
-        size = 3
         image = form.cleaned_data['image']
+        size = int(form.cleaned_data['size'])
         image = Image.open(image)
         np_new = bi_inter(image, size)
         img_new = Image.fromarray(np_new)
@@ -27,6 +27,6 @@ class Bi_line(FormView):
         byte_io.seek(0)
 
         response = HttpResponse(byte_io, content_type='image/png')
-        response['Content-Disposition'] = 'attachment; filename="image.png"'
+        response['Content-Disposition'] = f'attachment; filename="image_size_{size}.png"'
 
         return response
